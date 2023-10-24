@@ -10,7 +10,7 @@ services:
     volumes:
       - './services/users:/usr/src/app'
     ports:
-      - 5004:5000
+      - "5004:5000"
     environment:
       - FLASK_DEBUG=1
       - FLASK_ENV=development
@@ -39,7 +39,7 @@ services:
       - './services/client:/usr/src/app'
       - '/usr/src/app/node_modules'
     ports:
-      - 3007:3000
+      - "3007:3000"
     environment:
       - NODE_ENV=development
       - REACT_APP_API_SERVICE_URL=${REACT_APP_API_SERVICE_URL}
