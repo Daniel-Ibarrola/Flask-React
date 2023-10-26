@@ -1,8 +1,9 @@
 {
+    "family": "flask-react-users-td",
     "containerDefinitions": [
         {
             "name": "users",
-            "image": "%s.dkr.ecr.us-east-2.amazonaws.com/test-driven-users:prod",
+            "image": "668144156539.dkr.ecr.us-east-2.amazonaws.com/test-driven-users:prod",
             "cpu": 0,
             "portMappings": [
                 {
@@ -36,6 +37,10 @@
                     "value": "production"
                 }
             ],
+            "environmentFiles": [],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "ulimits": [],
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
@@ -43,9 +48,20 @@
                     "awslogs-group": "/ecs/flask-react-users-td",
                     "awslogs-region": "us-east-2",
                     "awslogs-stream-prefix": "ecs"
-                }
+                },
+                "secretOptions": []
             }
         }
     ],
-    "family": "flask-react-users-td"
+    "executionRoleArn": "arn:aws:iam::668144156539:role/ecsTaskExecutionRole",
+    "networkMode": "awsvpc",
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "512",
+    "memory": "1024",
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    }
 }
