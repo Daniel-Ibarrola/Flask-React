@@ -1,0 +1,51 @@
+{
+    "containerDefinitions": [
+        {
+            "name": "users",
+            "image": "%s.dkr.ecr.us-east-2.amazonaws.com/test-driven-users:prod",
+            "cpu": 0,
+            "portMappings": [
+                {
+                    "name": "users-5000-tcp",
+                    "containerPort": 5000,
+                    "hostPort": 5000,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "DATABASE_TEST_URL",
+                    "value": "postgres://postgres:postgres@api-db:5432/api_test"
+                },
+                {
+                    "name": "SECRET_KEY",
+                    "value": "%s"
+                },
+                {
+                    "name": "DATABASE_URL",
+                    "value": "%s"
+                },
+                {
+                    "name": "APP_SETTINGS",
+                    "value": "src.config.ProductionConfig"
+                },
+                {
+                    "name": "FLASK_ENV",
+                    "value": "production"
+                }
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-create-group": "true",
+                    "awslogs-group": "/ecs/flask-react-users-td",
+                    "awslogs-region": "us-east-2",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            }
+        }
+    ],
+    "family": "flask-react-users-td"
+}
