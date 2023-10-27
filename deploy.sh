@@ -18,6 +18,13 @@ register_definition() {
   fi
 }
 
+update_service() {
+  if [[ $(aws ecs update-service --cluster $cluster --service $service --task-definition $revision | $JQ '.service.taskDefinition') != $revision ]]; then
+    echo "Error updating service."
+    return 1
+  fi
+}
+
 deploy_cluster() {
 
   # users
@@ -36,5 +43,17 @@ deploy_cluster() {
 
 }
 
-configure_aws_cli
-deploy_cluster
+# new
+echo $CODEBUILD_WEBHOOK_BASE_REF
+echo $CODEBUILD_WEBHOOK_HEAD_REF
+echo $CODEBUILD_WEBHOOK_TRIGGER
+echo $CODEBUILD_WEBHOOK_EVENT
+
+# new
+if  [ "$CODEBUILD_WEBHOOK_TRIGGER" == "branch/master" ] && \
+    [ "$CODEBUILD_WEBHOOK_HEAD_REF" == "refs/heads/master" ]
+then
+  echo "Updating ECS."
+  configure_aws_cli
+  deploy_cluster
+fi
