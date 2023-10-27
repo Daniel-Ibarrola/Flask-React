@@ -27,33 +27,27 @@ update_service() {
 
 deploy_cluster() {
 
+  cluster="flask-react-cluster"
+
   # users
-  template="ecs_users_taskdefinition.json"
+  service="flask-react-users-service"
+  template="ecs_users_taskdefinition.json" 
   task_template=$(cat "ecs/$template")
   task_def=$(printf "$task_template" $PRODUCTION_SECRET_KEY $AWS_RDS_URI)
   echo "$task_def"
   register_definition
+  update_service
 
   # client
+  service="flask-react-client-service"
   template="ecs_client_taskdefinition.json"
   task_template=$(cat "ecs/$template")
   task_def=$(printf "$task_template")
   echo "$task_def"
   register_definition
+  update_service
 
 }
 
-# new
-echo $CODEBUILD_WEBHOOK_BASE_REF
-echo $CODEBUILD_WEBHOOK_HEAD_REF
-echo $CODEBUILD_WEBHOOK_TRIGGER
-echo $CODEBUILD_WEBHOOK_EVENT
-
-# new
-if  [ "$CODEBUILD_WEBHOOK_TRIGGER" == "branch/master" ] && \
-    [ "$CODEBUILD_WEBHOOK_HEAD_REF" == "refs/heads/master" ]
-then
-  echo "Updating ECS."
-  configure_aws_cli
-  deploy_cluster
-fi
+configure_aws_cli
+deploy_cluster
